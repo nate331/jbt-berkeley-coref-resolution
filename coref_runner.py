@@ -6,7 +6,7 @@ if __name__ == "__main__":
     input_file_name = ""
 
     print("--preprocessing....")
-    os.system("java -cp berkeleycoref-1.1.jar -Xmx5g edu.berkeley.nlp.coref.preprocess.PreprocessingDriver ++base.conf \
+    os.system("java -cp berkeleycoref-1.1.jar -Xmx10g edu.berkeley.nlp.coref.preprocess.PreprocessingDriver ++base.conf \
                 -execDir tmp \
                 -inputDir input \
                 -outputDir output_preprocessing")
@@ -22,7 +22,7 @@ if __name__ == "__main__":
             os.rename(os.path.join(dir, fname), os.path.join(dir, name + ".auto_conll"))
 
     print("--extracting coreferences...")
-    os.system("java -jar -Xmx5g berkeleycoref-1.1.jar ++base.conf \
+    os.system("java -jar -Xmx10g berkeleycoref-1.1.jar ++base.conf \
                   -execDir tmp \
                   -modelPath models/coref-rawtext-final.ser \
                   -testPath output_preprocessing \

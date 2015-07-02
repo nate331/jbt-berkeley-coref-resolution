@@ -2,6 +2,3 @@ tmp/*
 models/*
 .DS_Store
 commands.txt
-input/
-output_coref/
-output_preprocessing/
