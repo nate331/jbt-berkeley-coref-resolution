@@ -59,12 +59,12 @@ class CorefOutputParser:
                     coref_num = int(match.group())
                     
                 if "(" in row["coref"] and ")" in row["coref"]:
-                    text += self.entity_dict[coref_num]
+                    text += self.entity_dict[coref_num] + " "
                     self.count += 1
                 elif "(" in row["coref"]:
                     in_entity = True
                 elif ")" in row["coref"]:
-                    text += self.entity_dict[coref_num]
+                    text += self.entity_dict[coref_num] + " "
                     self.count += 1
                     in_entity = False
                 elif in_entity == False:
