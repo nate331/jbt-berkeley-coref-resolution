@@ -2,4 +2,4 @@ tmp/*
 models/*
 .DS_Store
 commands.txt
-*.pyc
+**.py[cdo]
