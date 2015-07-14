@@ -4,3 +4,18 @@ models/*
 commands.txt
 **.py[cdo]
 .ipynb_checkpoints/
+
+# IDEA (PyCharm)
+.idea/workspace.xml
+.idea/misc.xml
+.idea/*.iml
+.idea/dictionaries/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+data/
+project/project
+project/target
+target/
