@@ -3,3 +3,4 @@ models/*
 .DS_Store
 commands.txt
 **.py[cdo]
+.ipynb_checkpoints/
