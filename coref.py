@@ -4,13 +4,15 @@ import os
 import shutil
 import subprocess
 
+from qa_jbt.utils.paths import create_paths
+
 from jbt_berkeley_coref_resolution.CorefOutputParser import CorefOutputParser
 
 
 def do_coreference(article_content, data_path=os.path.join('.', 'data'), max_memory=6):
 
     temp_path = os.path.join(os.path.normpath(data_path), 'coref_temp')
-    jar_home = os.path.normpath(os.path.join(data_path, '..', 'jbt_berkeley_coref_resolution'))
+    jar_home = os.path.normpath(os.path.join(data_path, '..', '..', 'jbt_berkeley_coref_resolution'))
     paths = {
         'input': os.path.join(temp_path, 'input'),
         'preprocess': os.path.join(temp_path, 'output_preprocessing'),
@@ -19,7 +21,7 @@ def do_coreference(article_content, data_path=os.path.join('.', 'data'), max_mem
         'exec_c': os.path.join(temp_path, 'exec_c')
     }
 
-    __clean_paths(temp_path, [paths['input'], paths['preprocess'], paths['output']])
+    create_paths(data_path, temp_path, [paths['input'], paths['preprocess'], paths['output']])
 
     # write to file
     with open(os.path.join(paths['input'], 'article'), mode='w') as o:
@@ -77,15 +79,9 @@ def do_coreference(article_content, data_path=os.path.join('.', 'data'), max_mem
             output_file.writelines(lines[1:-1])
 
     # get parsed output file
-    return CorefOutputParser(os.path.join(paths['output'], 'article-coref-raw')).get_resolved_text()
+    lines = CorefOutputParser(os.path.join(paths['output'], 'article-coref-raw')).get_resolved_text()
 
+    # remove temp path after running
+    shutil.rmtree(temp_path)
 
-def __clean_paths(temp_path, paths):
-    """
-    Cleans the output path to remove files form previous runs.
-    """
-    if os.path.isdir(temp_path):
-        shutil.rmtree(temp_path)
-    os.mkdir(temp_path, mode=0o770)
-    for p in paths:
-        os.mkdir(p, mode=0o770)
+    return lines
