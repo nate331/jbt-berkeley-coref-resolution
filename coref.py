@@ -24,7 +24,7 @@ def do_coreference(article_content, data_path=os.path.join('.', 'data'), max_mem
     create_paths(data_path, temp_path, [paths['input'], paths['preprocess'], paths['output']])
 
     # write to file
-    with open(os.path.join(paths['input'], 'article'), mode='w') as o:
+    with open(os.path.join(paths['input'], 'article'), mode='w', encoding='utf-8') as o:
         o.writelines(article_content)
 
     # call preprocessor
@@ -73,9 +73,9 @@ def do_coreference(article_content, data_path=os.path.join('.', 'data'), max_mem
     ).communicate()
 
     # preparing output
-    with open(os.path.join(paths['preprocess'], 'berkeley_output_temp'), mode='r') as input_file:
+    with open(os.path.join(paths['preprocess'], 'berkeley_output_temp'), mode='r', encoding='utf-8') as input_file:
         lines = input_file.readlines()
-        with open(os.path.join(paths['output'], 'article-coref-raw'), mode='w') as output_file:
+        with open(os.path.join(paths['output'], 'article-coref-raw'), mode='w', encoding='utf-8') as output_file:
             output_file.writelines(lines[1:-1])
 
     # get parsed output file
