@@ -28,24 +28,29 @@ def do_coreference(article_content, data_path=os.path.join('.', 'data'), max_mem
         o.writelines(article_content)
 
     # call preprocessor
-    subprocess.Popen(
-        "java -cp berkeleycoref-1.1.jar "
-        "-Xmx{}g "
-        "edu.berkeley.nlp.coref.preprocess.PreprocessingDriver "
-        "++base.conf "
-        "-execDir {} "
-        "-inputDir {} "
-        "-outputDir {} "
-        "-skipSentenceSplitting true"
-        "-respectInputLineBreaks true".format(
-            max_memory,  # max Heap size in GB
-            paths['exec_p'],
-            paths['input'],
-            paths['preprocess']
-        ),
-        cwd=jar_home,
-        shell=True
-    ).communicate()
+    try:
+        output = subprocess.check_output(
+            "java -cp berkeleycoref-1.1.jar "
+            "-Xmx{}g "
+            "edu.berkeley.nlp.coref.preprocess.PreprocessingDriver "
+            "++base.conf "
+            "-execDir {} "
+            "-inputDir {} "
+            "-outputDir {} "
+            "-skipSentenceSplitting true "
+            "-respectInputLineBreaks true".format(
+                max_memory,  # max Heap size in GB
+                paths['exec_p'],
+                paths['input'],
+                paths['preprocess']
+            ),
+            cwd=jar_home,
+            shell=True
+        )
+        print(output)
+    except subprocess.CalledProcessError as e:
+        print(e)
+        return None
 
     # rename file for later use
     os.rename(
@@ -54,23 +59,28 @@ def do_coreference(article_content, data_path=os.path.join('.', 'data'), max_mem
     )
 
     # extracting coreferences
-    subprocess.Popen(
-        "java -jar -Xmx{}g berkeleycoref-1.1.jar "
-        "++base.conf "
-        "-execDir {} "
-        "-modelPath {} "
-        "-testPath {} "
-        "-outputPath {} "
-        "-mode PREDICT".format(
-            max_memory,  # max memory for process
-            paths['exec_c'],  # execDir for coreference
-            os.path.join('models', 'coref-rawtext-final.ser'),  # model path
-            paths['preprocess'],  # input path
-            os.path.join(paths['preprocess'], 'berkeley_output_temp')  # output file
-        ),
-        cwd=jar_home,
-        shell=True
-    ).communicate()
+    try:
+        output = subprocess.check_output(
+            "java -jar -Xmx{}g berkeleycoref-1.1.jar "
+            "++base.conf "
+            "-execDir {} "
+            "-modelPath {} "
+            "-testPath {} "
+            "-outputPath {} "
+            "-mode PREDICT".format(
+                max_memory,  # max memory for process
+                paths['exec_c'],  # execDir for coreference
+                os.path.join('models', 'coref-rawtext-final.ser'),  # model path
+                paths['preprocess'],  # input path
+                os.path.join(paths['preprocess'], 'berkeley_output_temp')  # output file
+            ),
+            cwd=jar_home,
+            shell=True
+        )
+        print(output)
+    except subprocess.CalledProcessError as e:
+        print(e)
+        return None
 
     # preparing output
     with open(os.path.join(paths['preprocess'], 'berkeley_output_temp'), mode='r', encoding='utf-8') as input_file:

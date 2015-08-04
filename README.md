@@ -1,4 +1,4 @@
-#How to run
+# How to run
 
 1. Download models:
 http://nlp.cs.berkeley.edu/downloads/berkeleycoref-1.0-models.tgz
